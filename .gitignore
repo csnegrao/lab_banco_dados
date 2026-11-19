@@ -11,3 +11,6 @@ node_modules/
 .venv/
 .browsers/
 corretor/.browsers/
+data/
+dist/
+.env

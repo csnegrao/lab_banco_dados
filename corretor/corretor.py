@@ -216,7 +216,8 @@ def corrigir_front(url, conn_str):
     except Exception:
         r = {"carregou": False, "erro": (p.stderr or p.stdout)[-300:]}
 
-    itens.append({"item": "front_pagina_abre", "ok": r.get("carregou", False), "pontos": 1.0 if r.get("carregou") else 0,
+    abriu = bool(r.get("carregou")) and not r.get("erro")   # HTTP 200 e sem erro de JS
+    itens.append({"item": "front_pagina_abre", "ok": abriu, "pontos": 1.0 if abriu else 0,
                   "obs": r.get("erro") or "ok"})
     pag_apur = {str(x["numero"]).strip(): str(x["total"]).strip() for x in r.get("apuracao", [])}
     ok = bool(pag_apur) and pag_apur == {k: str(v) for k, v in apur.items()}
@@ -269,6 +270,14 @@ def corrigir_entrega(k):
 
 
 def main():
+    if len(sys.argv) >= 2 and sys.argv[1] == "--ping":   # mantém o projeto do Supabase acordado
+        try:
+            with conectar(json.load(sys.stdin)["string_conexao"]) as cx:
+                cx.execute("SELECT 1")
+            print(json.dumps({"ok": True}))
+        except Exception as e:
+            print(json.dumps({"ok": False, "erro": mensagem_erro(e)}, ensure_ascii=False))
+        return
     if len(sys.argv) >= 2 and sys.argv[1] == "--json":
         print(json.dumps(corrigir_entrega(json.load(sys.stdin)), ensure_ascii=False, default=str))
         return

@@ -7,6 +7,17 @@ Avaliação prática das turmas de ADS:
 
 A correção é **em lote**: depois do prazo, o professor roda o corretor no servidor com a lista de entregas e recebe as notas em CSV.
 
+## Plataforma web (labbd.sl20.com.br)
+
+Além da correção em lote, o repositório tem uma plataforma web (Express + React, na raiz):
+
+- **Aluno** entra com a matrícula e a senha do EduTest, lê o enunciado, baixa a sua carga, cola a string do *Session pooler* do Supabase (a plataforma troca o usuário por `corretor` e usa a senha da matrícula; nenhuma senha do aluno é guardada), informa o link da página (N2) e clica em **Verificar minha entrega** para ver o que já está certo.
+- **Professor** (`/admin`, conta de professor do EduTest) cria a avaliação (turmas N1/N2, abertura e prazo), acompanha as entregas, dispara a correção final, libera as notas e exporta o CSV.
+- No **prazo**, a correção final de todas as entregas roda sozinha. Uma vez por dia a plataforma faz um `SELECT 1` em cada banco para o projeto gratuito do Supabase não pausar.
+- O corretor roda como usuário sem privilégios e só acessa o pooler do Supabase e páginas https com IP público.
+
+Implantação: `docs/IMPLANTACAO.md`.
+
 ## Estrutura
 
 | Pasta | Conteúdo |
