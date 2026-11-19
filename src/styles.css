@@ -25,3 +25,48 @@ html, body { background: #f1f5f9; color: #0f172a; }
 .enunciado table { width: 100%; border-collapse: collapse; margin: .8rem 0; font-size: .88rem; display: block; overflow-x: auto; }
 .enunciado th, .enunciado td { border: 1px solid #cbd5e1; padding: .4rem .6rem; text-align: left; vertical-align: top; }
 .enunciado th { background: #f8fafc; }
+
+/* ===================== Tema Matrix (área do aluno) =====================
+   Remapeia as cores do Tailwind só dentro de .matrix: fundo preto, verde fósforo.
+   Regra: efeito (brilho, fonte de terminal, chuva) só em títulos, botões e fundo;
+   enunciado e resultados ficam em texto claro e legível. O /admin não usa nada daqui. */
+.matrix {
+  --color-slate-50: #031208;  --color-slate-100: #020c05; --color-slate-200: #0f4a22; --color-slate-300: #1c8a42;
+  --color-slate-400: #5fae78; --color-slate-500: #8fd4a3; --color-slate-600: #b4e6c1; --color-slate-700: #d2f5db;
+  --color-slate-800: #0a3317; --color-slate-900: #041a0b;
+  --color-teal-100: #06361a; --color-teal-500: #00ff66; --color-teal-600: #00ff66; --color-teal-700: #00e65c; --color-teal-800: #5cff95;
+  --color-emerald-50: #03200d; --color-emerald-100: #06361a; --color-emerald-700: #6dffa0; --color-emerald-800: #9dffbe;
+  --color-red-50: #2a0608; --color-red-100: #4a0b10; --color-red-700: #ff8080;
+  --color-amber-50: #2a1f02; --color-amber-900: #ffd166;
+  position: relative; min-height: 100vh; background: #000; color: #d2f5db; color-scheme: dark;
+  font-family: "IBM Plex Sans", system-ui, sans-serif; accent-color: #00ff66;
+}
+.matrix > :not(.mx-rain) { position: relative; z-index: 1; }
+.mx-rain { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.matrix .bg-white { background: rgba(2, 14, 6, .92); backdrop-filter: blur(2px); }
+.matrix .rounded-xl, .matrix .rounded-lg, .matrix .rounded { border-radius: 0; }
+.matrix .shadow-sm { box-shadow: 0 0 0 1px #0f4a22, 0 0 24px rgba(0, 255, 102, .08); }
+.matrix .text-white { color: #e6ffec; }
+.matrix .bg-slate-900 { border: 1px solid #1c8a42; }
+.matrix .bg-teal-700 { color: #001a08; font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .06em;
+  box-shadow: 0 0 14px rgba(0, 255, 102, .35); }
+.matrix .bg-teal-700:hover { box-shadow: 0 0 22px rgba(0, 255, 102, .55); }
+.matrix button { font-family: "IBM Plex Mono", monospace; }
+.matrix input, .matrix select, .matrix textarea { background: #000; color: #e6ffec; caret-color: #00ff66; }
+.matrix input::placeholder { color: #3f7a52; }
+.matrix code { color: #9dffbe; }
+.mx-title { font-family: "VT323", monospace; color: #00ff66; text-shadow: 0 0 8px rgba(0, 255, 102, .55); letter-spacing: .03em; font-weight: 400; }
+.mx-mono { font-family: "IBM Plex Mono", monospace; }
+.mx-cursor::after { content: "█"; margin-left: 2px; animation: mx-blink 1s steps(1) infinite; color: #00ff66; }
+@keyframes mx-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .mx-cursor::after { animation: none; } }
+
+.matrix .enunciado { color: #d2f5db; }
+.matrix .enunciado h1, .matrix .enunciado h2, .matrix .enunciado h3 { font-family: "VT323", monospace; font-weight: 400; color: #00ff66; letter-spacing: .03em; }
+.matrix .enunciado h1 { font-size: 1.9rem; } .matrix .enunciado h2 { font-size: 1.6rem; border-top-color: #0f4a22; } .matrix .enunciado h3 { font-size: 1.35rem; }
+.matrix .enunciado a { color: #5cff95; }
+.matrix .enunciado code { background: #062611; color: #9dffbe; }
+.matrix .enunciado pre { background: #000; border: 1px solid #0f4a22; color: #9dffbe; }
+.matrix .enunciado blockquote { background: #03200d; border-left-color: #00ff66; }
+.matrix .enunciado th, .matrix .enunciado td { border-color: #0f4a22; }
+.matrix .enunciado th { background: #062611; color: #9dffbe; }

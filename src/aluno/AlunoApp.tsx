@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { alunoApi as api, ApiError, fmtData, fmtNota, ITENS } from "../api";
+import MatrixRain from "./MatrixRain";
+import "@fontsource/vt323/400.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/600.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/600.css";
 
 type Item = { item: string; ok: boolean; pontos?: number; obs: string };
 type Correcao = {
@@ -18,13 +24,14 @@ type Avaliacao = {
 export default function AlunoApp() {
   const [logado, setLogado] = useState(!!api.getToken());
   return (
-    <div className="min-h-screen">
-      <header className="bg-slate-900 text-white">
+    <div className="matrix">
+      <MatrixRain intensidade={logado ? 0.16 : 0.4} />
+      <header className="bg-slate-900 text-white" style={{ borderWidth: "0 0 1px" }}>
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
           <Logo />
           <div className="flex-1 min-w-0">
-            <p className="font-semibold leading-tight">Laboratório de Banco de Dados</p>
-            <p className="text-xs text-slate-400">Avaliação CIPA · Supabase</p>
+            <p className="mx-title text-2xl leading-none">LAB_BANCO_DE_DADOS</p>
+            <p className="text-xs text-slate-400 mx-mono">avaliação CIPA · supabase · postgres</p>
           </div>
           {logado && <button className="text-sm text-slate-300 hover:text-white" onClick={() => { api.setToken(null); setLogado(false); }}>Sair</button>}
         </div>
@@ -37,9 +44,9 @@ export default function AlunoApp() {
 function Logo() {
   return (
     <svg viewBox="0 0 32 32" className="w-8 h-8 shrink-0" aria-hidden>
-      <ellipse cx="16" cy="7" rx="11" ry="4" fill="#0f766e" />
-      <path d="M5 7v18c0 2.2 4.9 4 11 4s11-1.8 11-4V7c0 2.2-4.9 4-11 4S5 9.2 5 7z" fill="#14b8a6" />
-      <path d="M5 16c0 2.2 4.9 4 11 4s11-1.8 11-4" fill="none" stroke="#0f766e" strokeWidth="1.5" />
+      <ellipse cx="16" cy="7" rx="11" ry="4" fill="#00b347" />
+      <path d="M5 7v18c0 2.2 4.9 4 11 4s11-1.8 11-4V7c0 2.2-4.9 4-11 4S5 9.2 5 7z" fill="#00ff66" />
+      <path d="M5 16c0 2.2 4.9 4 11 4s11-1.8 11-4" fill="none" stroke="#00b347" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -59,7 +66,8 @@ function Login({ onOk }: { onOk: () => void }) {
   return (
     <form onSubmit={entrar} className="max-w-sm mx-auto mt-8 bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4">
       <div>
-        <h1 className="text-xl font-bold">Entrar</h1>
+        <p className="mx-mono text-xs text-slate-500 tracking-widest">&gt; CONEXÃO SEGURA</p>
+        <h1 className="mx-title text-4xl mt-1 mx-cursor">ACESSO</h1>
         <p className="text-sm text-slate-500 mt-1">Use a sua matrícula e a mesma senha do EduTest.</p>
       </div>
       <label className="block">
@@ -94,9 +102,9 @@ function Painel({ onSair }: { onSair: () => void }) {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-sm text-slate-500">Olá,</p>
-        <h1 className="text-2xl font-bold">{dados.nome}</h1>
-        <p className="text-sm text-slate-500">Matrícula {dados.matricula}</p>
+        <p className="text-sm text-slate-500 mx-mono">&gt; usuário autenticado</p>
+        <h1 className="mx-title text-4xl">{dados.nome}</h1>
+        <p className="text-sm text-slate-500 mx-mono">matrícula {dados.matricula}</p>
       </div>
       {dados.avaliacoes.length === 0 && (
         <div className="bg-white rounded-xl border border-slate-200 p-6 text-slate-600">
@@ -117,7 +125,7 @@ function CartaoAvaliacao({ a, matricula, recarregar }: { a: Avaliacao; matricula
           <span className="inline-block text-xs font-bold tracking-wide bg-teal-100 text-teal-800 rounded px-2 py-0.5">
             {a.tipo === "N2" ? "N2 · Banco + Front End" : "N1 · Banco de Dados"}
           </span>
-          <h2 className="text-lg font-bold mt-1">{a.titulo}</h2>
+          <h2 className="mx-title text-3xl mt-1">{a.titulo}</h2>
           <p className="text-sm text-slate-500">Prazo: <strong className="text-slate-700">{fmtData(a.fecha_em)}</strong></p>
         </div>
         <Situacao a={a} />
@@ -162,9 +170,9 @@ function Situacao({ a }: { a: Avaliacao }) {
 function Passo({ n, titulo, children }: { n: number; titulo: string; children: React.ReactNode }) {
   return (
     <div className="p-5 flex gap-4">
-      <div className="w-7 h-7 shrink-0 rounded-full bg-slate-900 text-white text-sm font-bold flex items-center justify-center">{n}</div>
+      <div className="w-8 h-8 shrink-0 bg-slate-900 mx-title text-xl flex items-center justify-center">{n}</div>
       <div className="flex-1 min-w-0">
-        <h3 className="font-semibold mb-1">{titulo}</h3>
+        <h3 className="font-semibold mb-1 mx-mono text-slate-700">{titulo}</h3>
         {children}
       </div>
     </div>
@@ -329,8 +337,8 @@ function NotaFinal({ a }: { a: Avaliacao }) {
     <div className="bg-slate-900 text-white p-5">
       <p className="text-sm text-slate-300">Nota final (corrigida em {fmtData(c.terminado_em)})</p>
       <div className="flex gap-8 mt-1">
-        <div><p className="text-xs text-slate-400">Banco de Dados</p><p className="text-3xl font-bold tabular-nums">{fmtNota(c.nota_banco)}</p></div>
-        {a.tipo === "N2" && <div><p className="text-xs text-slate-400">Front End</p><p className="text-3xl font-bold tabular-nums">{fmtNota(c.nota_front)}</p></div>}
+        <div><p className="text-xs text-slate-400">Banco de Dados</p><p className="mx-title text-5xl tabular-nums">{fmtNota(c.nota_banco)}</p></div>
+        {a.tipo === "N2" && <div><p className="text-xs text-slate-400">Front End</p><p className="mx-title text-5xl tabular-nums">{fmtNota(c.nota_front)}</p></div>}
       </div>
       {c.erro && <p className="text-sm text-red-300 mt-2">{c.erro}</p>}
       <details className="mt-3 bg-white text-slate-900 rounded-lg">
