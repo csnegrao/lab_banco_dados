@@ -1,0 +1,11 @@
+# gabarito: nunca publicar
+corretor/gabarito_ref.py
+gabarito*.sql
+# entregas e notas dos alunos
+entregas*.csv
+!exemplos/entregas_exemplo.csv
+resultado/
+cargas/
+__pycache__/
+node_modules/
+.venv/
