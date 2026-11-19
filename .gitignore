@@ -9,3 +9,5 @@ cargas/
 __pycache__/
 node_modules/
 .venv/
+.browsers/
+corretor/.browsers/
