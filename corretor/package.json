@@ -2,5 +2,5 @@
   "name": "corretor-front-cipa",
   "private": true,
   "description": "Teste automático da página de Front (N2) da avaliação CIPA",
-  "dependencies": { "playwright": "1.48.2" }
+  "dependencies": { "playwright": "1.64.1" }
 }

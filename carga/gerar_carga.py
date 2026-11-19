@@ -144,6 +144,14 @@ END $$;
 GRANT USAGE ON SCHEMA public TO corretor;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO corretor;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO corretor;
+
+-- O corretor continua lendo os dados mesmo depois que você ligar o RLS (Parte B da N2).
+-- NÃO apague estas políticas: sem elas o corretor enxerga as tabelas vazias.
+CREATE POLICY corretor_leitura ON setor     FOR SELECT TO corretor USING (true);
+CREATE POLICY corretor_leitura ON eleitor   FOR SELECT TO corretor USING (true);
+CREATE POLICY corretor_leitura ON chapa     FOR SELECT TO corretor USING (true);
+CREATE POLICY corretor_leitura ON candidato FOR SELECT TO corretor USING (true);
+CREATE POLICY corretor_leitura ON voto      FOR SELECT TO corretor USING (true);
 """)
     return "\n".join(L)
 
