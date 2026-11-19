@@ -1,0 +1,3 @@
+matricula,nome,turma,string_conexao,url_pagina
+2026001,Ana Exemplo,N1,postgresql://corretor.abcdefghijklmnop:SENHA@aws-0-sa-east-1.pooler.supabase.com:5432/postgres,
+2026002,Bruno Exemplo,N2,postgresql://corretor.qrstuvwxyzabcdef:SENHA@aws-0-sa-east-1.pooler.supabase.com:5432/postgres,https://bruno.github.io/cipa/
