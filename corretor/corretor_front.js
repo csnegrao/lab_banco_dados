@@ -10,7 +10,14 @@ const { chromium } = require('playwright');
 const PRIVADOS = new net.BlockList();
 for (const [a, b] of [['0.0.0.0', 8], ['10.0.0.0', 8], ['100.64.0.0', 10], ['127.0.0.0', 8], ['169.254.0.0', 16],
   ['172.16.0.0', 12], ['192.0.0.0', 24], ['192.168.0.0', 16], ['198.18.0.0', 15], ['224.0.0.0', 3]]) PRIVADOS.addSubnet(a, b, 'ipv4');
-for (const [a, b] of [['::', 127], ['::ffff:0:0', 96], ['fc00::', 7], ['fe80::', 10], ['ff00::', 8]]) PRIVADOS.addSubnet(a, b, 'ipv6');
+// Atenção: não incluir ::ffff:0:0/96 aqui. O BlockList do Node aplica essa regra a TODO endereço IPv4.
+// IPv4 embutido em IPv6 (::ffff:a.b.c.d) é convertido e conferido como IPv4 em privado().
+for (const [a, b] of [['::', 127], ['fc00::', 7], ['fe80::', 10], ['ff00::', 8]]) PRIVADOS.addSubnet(a, b, 'ipv6');
+function privado(ip) {
+  const m = ip.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/i);
+  if (m) return PRIVADOS.check(m[1], 'ipv4');
+  return PRIVADOS.check(ip, net.isIPv6(ip) ? 'ipv6' : 'ipv4');
+}
 const PERMITIR_LOCAL = process.env.LABBD_PERMITIR_LOCAL === '1'; // só para testes automatizados
 
 const cache = new Map();
@@ -23,7 +30,7 @@ async function destinoPublico(urlStr) {
   if (!cache.has(host)) {
     cache.set(host, (async () => {
       const ips = net.isIP(host) ? [{ address: host, family: net.isIP(host) }] : await dns.lookup(host, { all: true }).catch(() => []);
-      return ips.length > 0 && ips.every(i => !PRIVADOS.check(i.address, i.family === 6 ? 'ipv6' : 'ipv4'));
+      return ips.length > 0 && ips.every(i => !privado(i.address));
     })());
   }
   return cache.get(host);
